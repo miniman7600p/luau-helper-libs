@@ -11,6 +11,7 @@ local DEFAULTS = {
 	MaxDistance = 2000,
 	UseTeamCheck = false,
 	Box = true,
+	Outline = true,
 	Name = true,
 	Distance = true,
 	BoxColor = Color3.fromRGB(255, 255, 255),
@@ -261,19 +262,22 @@ function ESP:_updateEntry(entry, camera, localRoot)
 	local x = center.X - width / 2
 	local y = top.Y
 
-		local showBox = self:_getOption(entry, "Box")
+	local showBox = self:_getOption(entry, "Box")
+	local showOutline = showBox and self:_getOption(entry, "Outline")
 	entry.drawings.Box.Visible = showBox and self.globalOptions.Enabled
-	entry.drawings.Outline.Visible = showBox and self.globalOptions.Enabled
+	entry.drawings.Outline.Visible = showOutline and self.globalOptions.Enabled
 	if showBox then
 		entry.drawings.Box.Color = self:_getOption(entry, "BoxColor")
 		entry.drawings.Box.Thickness = self:_getOption(entry, "BoxThickness")
 		entry.drawings.Box.Position = Vector2.new(x, y)
 		entry.drawings.Box.Size = Vector2.new(width, height)
 
-		entry.drawings.Outline.Color = self:_getOption(entry, "OutlineColor")
-		entry.drawings.Outline.Thickness = self:_getOption(entry, "OutlineThickness")
-		entry.drawings.Outline.Position = Vector2.new(x - 1, y - 1)
-		entry.drawings.Outline.Size = Vector2.new(width + 2, height + 2)
+		if showOutline then
+			entry.drawings.Outline.Color = self:_getOption(entry, "OutlineColor")
+			entry.drawings.Outline.Thickness = self:_getOption(entry, "OutlineThickness")
+			entry.drawings.Outline.Position = Vector2.new(x - 1, y - 1)
+			entry.drawings.Outline.Size = Vector2.new(width + 2, height + 2)
+		end
 	end
 
 	local showName = self:_getOption(entry, "Name")
